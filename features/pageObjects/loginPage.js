@@ -17,7 +17,7 @@ class LoginPage extends BasePage {
     return $("//h3[normalize-space()='kasirAja']");
   }
 
-  // for negative test
+  // for negative test email and password wrong
   get messageElement() {
     return $("//div[@role='alert']");
   }

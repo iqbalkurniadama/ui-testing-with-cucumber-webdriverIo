@@ -12,6 +12,16 @@ Feature: Login flow in kasirAja
     Examples:
       | wrongEmail        | wrongPassword | errorMessage                       |
       | test123@gmail.com | asd           | Kredensial yang Anda berikan salah |
+  
+  # negative 
+  Scenario: User enters wrong email and password
+    When I input email as "<wrongEmail>" and password as "<wrongPassword>"
+    And I click on the login button
+    Then I must see error message <errorMessage>
+
+    Examples:
+      | wrongEmail        | wrongPassword | errorMessage                              |
+      | test123@gmail.com |               | "\"password\" is not allowed to be empty" |
 
   # positive
   Scenario: User can login using valid data

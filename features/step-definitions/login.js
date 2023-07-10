@@ -22,3 +22,4 @@ Then('I must navigate to dashboard page', async () => {
 Then('I must see error message {string}', async (errorMessage) => {
   await expect(loginPage.messageElement).toHaveTextContaining(errorMessage);
 });
+

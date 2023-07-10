@@ -1,3 +1,7 @@
+import fs from 'node:fs/promises'
+// Import the module
+import { generate } from 'multiple-cucumber-html-reporter'
+
 exports.config = {
     //
     // ====================
@@ -6,6 +10,24 @@ exports.config = {
     // WebdriverIO supports running e2e tests as well as unit and component tests.
     runner: 'local',
     
+    onPrepare: () => {
+        // Remove the `.tmp/` folder that holds the json and report files
+        return fs.rm('.tmp/', { recursive: true });
+    },
+    /**
+     * Gets executed after all workers got shut down and the process is about to exit.
+     */
+    onComplete: () => {
+    // Generate the report when it all tests are done
+    generate({
+        // Required
+        // This part needs to be the same path where you store the JSON files
+        // default = '.tmp/json/'
+        jsonDir: '.tmp/json/',
+        reportPath: '.tmp/report/',
+        // for more options see https://github.com/wswebcreation/multiple-cucumber-html-reporter#options
+    });
+    },
     //
     // ==================
     // Specify Test Files
@@ -124,8 +146,20 @@ exports.config = {
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter
-    reporters: ['spec','cucumberjs-json'],
-
+    reporters: [
+        'spec',
+        [
+            // Like this with the default options, see the options below
+            'cucumberjs-json',
+    
+            // OR like this if you want to set the folder and the language
+            [ 'cucumberjs-json', {
+                    jsonFolder: '.tmp/new/',
+                    language: 'en',
+                },
+            ],
+        ],
+    ],
     //
     // If you are using Cucumber you need to specify the location of your step definitions.
     cucumberOpts: {
